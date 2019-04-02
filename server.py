@@ -6,29 +6,33 @@ from message import message_receive
 host = None
 port = None
 
-class MyThread(threading.Thread):
-    def __init__(self,threadName,num):
+class receiveThread(threading.Thread):
+    def __init__(self):
         threading.Thread.__init__(self)
-        self.threadName = threadName
-        self.num = num
-
-    def send(self,con):
-        message_send.send(con)
-    def receive(self,con):
+    def run(self,con):
         message_receive.receive(con)
 
+class sendThread(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+
+    def run(self,socket):
+        message_send.send(socket)
 def main():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     host = socket.gethostname()
     port = 9999
     s.bind((host, port))
     s.listen(5)
-    conn, addr = s.accept()
     while True:
-        server_thread = MyThread('name',1)
-        server_thread.start()
-        server_thread.receive(conn)
-        server_thread.send(conn)
+        conn, addr = s.accept()
+        print(conn)
+        print(addr)
+        send = sendThread().run(conn)
+        send.start()
+        receive = receiveThread.run(conn)
+        receive.start()
+        print('a')
 
 
 if __name__ == "__main__":
