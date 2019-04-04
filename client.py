@@ -1,5 +1,7 @@
 import socket
 import server
+import threading
+import message
 
 s = None
 host = None
@@ -14,12 +16,10 @@ def socket_set():
 
 def main():
     socket_set()
-    print(s)
-    receive = server.receiveThread.run(s)
-    print(receive)
-    receive.start()
-    send = server.sendThread.run(s)
-    send.start()
+
+    server.SendThread(s).start()
+    server.ReceiveTread(s).start()
+
 
 if __name__ == '__main__':
     main()
