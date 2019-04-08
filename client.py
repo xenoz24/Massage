@@ -9,7 +9,7 @@ port = None
 
 def socket_set():
     global s,host,port
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s = socket.socket()
     host = socket.gethostname()
     port = 9999
     s.connect((host, port))

@@ -30,22 +30,22 @@ class ReceiveFile(threading.Thread):
         self.conn = conn
 
     def run(self):
-        print('啟動接收檔案')
-        Img.revice(self.conn)
+        print('\n啟動接收檔案')
+        Img.receive(self.conn)
 
-class SendImg(threading.Thread):
+class SendFile(threading.Thread):
     def __init__(self,conn):
         threading.Thread.__init__(self)
         self.conn = conn
 
     def run(self):
-        print('啟動傳檔')
+        print('\n啟動傳檔')
         Img.send(self.conn)
 
 
 def main():
     global conn
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s = socket.socket()
     host = socket.gethostname()
     port = 9999
     s.bind((host, port))
@@ -54,7 +54,10 @@ def main():
 
     ReceiveTread(conn).start()
     SendThread(conn).start()
-
+    try:
+        pass
+    except(OSError):
+        print('中斷連線')
 
 if __name__ == "__main__":
     main()
